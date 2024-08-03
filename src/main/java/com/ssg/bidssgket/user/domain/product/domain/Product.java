@@ -1,5 +1,10 @@
 package com.ssg.bidssgket.user.domain.product.domain;
 
+import com.ssg.bidssgket.user.domain.auction.domain.Auction;
+import com.ssg.bidssgket.user.domain.member.domain.Review;
+import com.ssg.bidssgket.user.domain.member.domain.WishProduct;
+import com.ssg.bidssgket.user.domain.order.domain.PurchaseOrder;
+import com.ssg.bidssgket.user.domain.order.domain.SaleOrder;
 import jakarta.persistence.*;
 import lombok.*;
 import com.ssg.bidssgket.user.domain.member.domain.Member;
@@ -67,7 +72,7 @@ public class Product {
 
     @OneToOne
     @JoinColumn(name = "wishListNo")
-    private WishList wishList;
+    private WishProduct wishProduct;
 
     @OneToOne
     @JoinColumn(name = "purchaseOrderNo")

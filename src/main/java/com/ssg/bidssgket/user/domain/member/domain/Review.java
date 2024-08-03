@@ -1,23 +1,46 @@
 package com.ssg.bidssgket.user.domain.member.domain;
 
+import com.ssg.bidssgket.user.domain.product.domain.Product;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer review_no;
+    private Long reviewNo;
     private String comment;
-    private Integer biscuit_rating;
+    private Integer biscuitRating;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberNo")
-    private Member member;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reviewerNo")
+    private Member reviewer;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reviewedNo")
+    private Member reviewee;
 
-    // 리뷰 작성자와 리뷰 대상자의 공통 상품 컬럼?
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productNo")
+    private Product productNo;
+
+//    public static Review createReview(Member member, Product product) {
+//        Review review = new Review();
+//        review.setReviewer(member);
+//        review.setReviewed(member);
+//        review.setProductNo(product);
+//        return review;
+//    }
+
+    @Builder
+    private Review(String comment, Integer biscuitRating,Member reviewer, Member reviewee, Product productNo) {
+        this.comment = comment;
+        this.biscuitRating = biscuitRating;
+        this.reviewer = reviewer;
+        this.reviewee = reviewee;
+        this.productNo = productNo;
+    }
 }
