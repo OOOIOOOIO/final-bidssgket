@@ -20,9 +20,6 @@ public class PaymentResDto {
     private Long saleOrderNo;
 
     public PaymentResDto(Payment payment) {
-        if (payment.getPayChange() == null || payment.getPurchaseOrder() == null || payment.getSaleOrder() == null) {
-            throw new IllegalArgumentException("Null을 허용하지 않는 필드에서 Null이 감지되었습니다.");
-        }
         this.paymentNo = payment.getPaymentNo();
         this.memberNo = payment.getMember().getMemberNo();
         this.paymentType = payment.getPaymentType().name();

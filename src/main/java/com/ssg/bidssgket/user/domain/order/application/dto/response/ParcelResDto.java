@@ -19,7 +19,7 @@ public class ParcelResDto {
     private LocalDateTime updatedAt;
     private boolean isDeleted;
 
-    private Long sellerNo;
+    private Long memberNo;
     private Long purchaseOrderNo;
     private Long saleOrderNo;
 
@@ -32,7 +32,7 @@ public class ParcelResDto {
         this.updatedAt = parcel.getUpdatedAt();
         this.isDeleted = parcel.getIsDeleted();
 
-        this.sellerNo = parcel.getSeller().getMemberNo();
+        this.memberNo = parcel.getMember().getMemberNo();
         this.purchaseOrderNo = parcel.getPurchaseOrder().getPurchaseOrderNo();
         this.saleOrderNo = parcel.getSaleOrder().getSaleOrderNo();
     }

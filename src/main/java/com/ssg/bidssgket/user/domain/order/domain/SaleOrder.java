@@ -35,29 +35,30 @@ public class SaleOrder extends BaseTimeAndDeleteEntity {
     private OrderStatus orderStatus; // 결제대기, 결제완료, 배송대기, 배송중, 배송완료, 주문완료, 결제취소, 주문취소
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_no", nullable = false)
-    private Member seller; // 판매자 회원 번호 [FK]
+    @JoinColumn(name = "memberNo", nullable = false)
+    private Member member; // 판매자 회원 번호 [FK]
 
     @OneToOne
-    @JoinColumn(name = "product_no", nullable = false)
+    @JoinColumn(name = "productNo", nullable = false)
     private Product product; // 상품 번호 [FK]
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_no")
+    @JoinColumn(name = "paymentNo", nullable = false)
     private Payment payment; // 결제 정보 [FK]
 
-    @OneToOne(mappedBy = "SaleOrder", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parcelNo")
     private Parcel parcel; // 택배 정보 [FK]
 
     @Builder
-    private SaleOrder(TransactionType transactionType, DeliveryType deliveryType, OrderStatus orderStatus, Member seller, Product product, Parcel parcel, Payment payment) {
+    private SaleOrder(TransactionType transactionType, DeliveryType deliveryType, OrderStatus orderStatus, Member member, Product product, Payment payment, Parcel parcel) {
         this.transactionType = transactionType;
         this.deliveryType = deliveryType;
         this.orderStatus = orderStatus;
-        this.seller = seller;
+        this.member = member;
         this.product = product;
-        this.parcel = parcel;
         this.payment = payment;
+        this.parcel = parcel;
     }
 
     /**
@@ -65,33 +66,38 @@ public class SaleOrder extends BaseTimeAndDeleteEntity {
      * @param transactionType 거래 유형
      * @param deliveryType 배송 유형
      * @param orderStatus 주문 상태
-     * @param seller 판매자
+     * @param member 판매자
      * @param product 상품
-     * @param parcel 택배 정보
      * @param payment 결제 정보
+     * @param parcel 택배 정보
      * @return 생성된 SaleOrder 객체
      */
-    public static SaleOrder createSaleOrder(TransactionType transactionType, DeliveryType deliveryType, OrderStatus orderStatus, Member seller, Product product, Parcel parcel, Payment payment) {
+    public static SaleOrder addSaleOrder(TransactionType transactionType, DeliveryType deliveryType, OrderStatus orderStatus, Member member, Product product, Payment payment, Parcel parcel) {
         return SaleOrder.builder()
                 .transactionType(transactionType)
                 .deliveryType(deliveryType)
                 .orderStatus(orderStatus)
-                .seller(seller)
+                .member(member)
                 .product(product)
-                .parcel(parcel)
                 .payment(payment)
+                .parcel(parcel)
                 .build();
     }
 
     /***
-     * 택배 정보 설정 메서드
-     * @param parcel 택배 정보
+     * 판매자 회원 정보 설정 메서드
+     * @param member 판매자 회원 정보
      */
-    public void setParcel(Parcel parcel) {
-        this.parcel = parcel;
-        if (parcel.getSaleOrder() != this) {
-            parcel.setSaleOrder(this);
-        }
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    /***
+     * 상품 정보 설정 메서드
+     * @param product
+     */
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     /***
@@ -103,5 +109,13 @@ public class SaleOrder extends BaseTimeAndDeleteEntity {
         if (payment.getSaleOrder() != this) {
             payment.setSaleOrder(this);
         }
+    }
+
+    /***
+     * 택배 정보 설정 메서드
+     * @param parcel 택배 정보
+     */
+    public void setParcel(Parcel parcel) {
+        this.parcel = parcel;
     }
 }

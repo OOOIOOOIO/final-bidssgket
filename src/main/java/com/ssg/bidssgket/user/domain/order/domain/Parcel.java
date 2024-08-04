@@ -29,38 +29,61 @@ public class Parcel extends BaseTimeAndDeleteEntity {
     private DeliveryStatus deliveryStatus; // 배송대기, 배송중, 배송완료
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_no", nullable = false)
-    private Member seller; // 판매자 [FK]
+    @JoinColumn(name = "memberNo", nullable = false)
+    private Member member; // 판매자 [FK]
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchase_no", nullable = false)
+    @OneToOne(mappedBy = "parcel", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private PurchaseOrder purchaseOrder; // 구매 주문서 [FK]
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sale_order_no", nullable = false)
+    @OneToOne(mappedBy = "parcel", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private SaleOrder saleOrder; // 판매 주문서 [FK]
 
     @Builder
-    public Parcel(String courierName, String trackingNum, DeliveryStatus deliveryStatus, Member seller, PurchaseOrder purchaseOrder, SaleOrder saleOrder) {
+    public Parcel(String courierName, String trackingNum, DeliveryStatus deliveryStatus, Member member) {
         this.courierName = courierName;
         this.trackingNum = trackingNum;
         this.deliveryStatus = deliveryStatus;
-        this.seller = seller;
-        this.purchaseOrder = purchaseOrder;
-        this.saleOrder = saleOrder;
+        this.member = member;
     }
 
+    /***
+     * 택배 정보 생성 메서드
+     * @param courierName 택배사 이름
+     * @param trackingNum 운소장 번호
+     * @param deliveryStatus 배송 상태
+     * @param member 판매자 정보
+     * @return
+     */
+    public static Parcel addParcel(String courierName, String trackingNum, DeliveryStatus deliveryStatus, Member member) {
+        return Parcel.builder()
+                .courierName(courierName)
+                .trackingNum(trackingNum)
+                .deliveryStatus(deliveryStatus)
+                .member(member)
+                .build();
+    }
+
+    /***
+     * 판매자 회원 정보 설정 메서드
+     * @param member 판매자 회원 정보
+     */
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    /***
+     * 구매 주문서 설정 메서드
+     * @param purchaseOrder 구매 주문서 정보
+     */
     public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
         this.purchaseOrder = purchaseOrder;
-        if (purchaseOrder.getParcel() != this) {
-            purchaseOrder.setParcel(this);
-        }
     }
 
+    /***
+     * 판매 주문서 설정 메서드
+     * @param saleOrder 판매 주문서 정보
+     */
     public void setSaleOrder(SaleOrder saleOrder) {
         this.saleOrder = saleOrder;
-        if (saleOrder.getParcel() != this) {
-            saleOrder.setParcel(this);
-        }
     }
 }

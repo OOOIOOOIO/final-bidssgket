@@ -21,15 +21,11 @@ public class SaleOrderResDto {
     private LocalDateTime updatedAt;
     private boolean isDeleted;
 
-    private Long sellerNo;
+    private Long memberNo;
     private Long productNo;
     private Long paymentNo;
 
     public SaleOrderResDto(SaleOrder saleOrder) {
-        if (saleOrder.getPayment() == null) {
-            throw new IllegalArgumentException("결제 정보가 없습니다.");
-        }
-
         this.saleOrderNo = saleOrder.getSaleOrderNo();
         this.transactionType = saleOrder.getTransactionType();
         this.deliveryType = saleOrder.getDeliveryType();
@@ -38,7 +34,7 @@ public class SaleOrderResDto {
         this.updatedAt = saleOrder.getUpdatedAt();
         this.isDeleted = saleOrder.getIsDeleted();
 
-        this.sellerNo = saleOrder.getSeller().getMemberNo();
+        this.memberNo = saleOrder.getMember().getMemberNo();
         this.productNo = saleOrder.getProduct().getProductNo();
         this.paymentNo = saleOrder.getPayment().getPaymentNo();
     }
