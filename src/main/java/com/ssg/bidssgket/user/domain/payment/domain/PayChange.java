@@ -17,7 +17,7 @@ public class PayChange {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int payChangeNo; // 비스킷 페이 잔액 변경 내역 번호 [PK]
+    private Long payChangeNo; // 비스킷 페이 잔액 변경 내역 번호 [PK]
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -33,18 +33,22 @@ public class PayChange {
     private LocalDateTime createdAt; // 등록일
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "member_no", nullable=false)
+    @JoinColumn(name = "pay_no", nullable=false)
     private Pay pay; // 결제 [FK]
 
     @Builder
     public PayChange(PayChangeType payChangeType, int changeAmount, int initialBalance, Pay pay) {
         this.payChangeType = payChangeType;
         this.payChangeAmount = changeAmount;
-        setBalance(initialBalance);
         this.pay = pay;
         this.createdAt = LocalDateTime.now();
+        setBalance(initialBalance);
     }
 
+    /***
+     * 잔액 설정 메서드
+     * @param initialBalance 초기 잔액
+     */
     public void setBalance(int initialBalance) {
         if (payChangeType == PayChangeType.DEPOSIT) {
             this.balance = initialBalance + payChangeAmount;
@@ -57,10 +61,14 @@ public class PayChange {
         }
     }
 
+    /***
+     * 결제 객체 설정 메서드
+     * @param pay 결제 객체
+     */
     public void setPay(Pay pay) {
         this.pay = pay;
-        if (!pay.getPayChanges().contains(this)) {
-            pay.getPayChanges().add(this);
+        if (!pay.getPayChangeList().contains(this)) {
+            pay.getPayChangeList().add(this);
         }
     }
 }

@@ -17,7 +17,7 @@ public class Parcel extends BaseTimeAndDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int parcelNo; // 택배 번호 [PK]
+    private Long parcelNo; // 택배 번호 [PK]
 
     @Column(nullable = false)
     private String courierName; // 택배 회사의 이름
@@ -48,5 +48,19 @@ public class Parcel extends BaseTimeAndDeleteEntity {
         this.seller = seller;
         this.purchaseOrder = purchaseOrder;
         this.saleOrder = saleOrder;
+    }
+
+    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+        if (purchaseOrder.getParcel() != this) {
+            purchaseOrder.setParcel(this);
+        }
+    }
+
+    public void setSaleOrder(SaleOrder saleOrder) {
+        this.saleOrder = saleOrder;
+        if (saleOrder.getParcel() != this) {
+            saleOrder.setParcel(this);
+        }
     }
 }

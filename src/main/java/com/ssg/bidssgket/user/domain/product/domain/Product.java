@@ -4,8 +4,6 @@ import com.ssg.bidssgket.common.domain.BaseTimeEntity;
 import com.ssg.bidssgket.user.domain.auction.domain.Auction;
 import com.ssg.bidssgket.user.domain.member.domain.Review;
 import com.ssg.bidssgket.user.domain.member.domain.Wishlist;
-import com.ssg.bidssgket.user.domain.order.domain.PurchaseOrder;
-import com.ssg.bidssgket.user.domain.order.domain.SaleOrder;
 import com.ssg.bidssgket.user.domain.product.view.dto.request.ProductReqDto;
 import jakarta.persistence.*;
 import lombok.*;

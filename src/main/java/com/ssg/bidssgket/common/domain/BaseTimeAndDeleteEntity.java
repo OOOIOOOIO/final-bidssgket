@@ -23,7 +23,6 @@ public class BaseTimeAndDeleteEntity {
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(nullable=false)
     private LocalDateTime updatedAt;
 
     @Column(nullable=false)
