@@ -31,13 +31,11 @@
 
     const eventSource1 = new EventSource('/detailSeller/admin/notify/close/buyer/' + productNo)
 
-    const eventSource2 = new EventSource('/detailSeller/admin/notify/close/seller/' + productNo)
-
     console.log(eventSource1)
 
     console.log("===== =====")
 
-    eventSource1.addEventListener("canceled", function(event) {
+    eventSource1.addEventListener("closed", function(event) {
       console.log(event.data)
 
       // 브라우저 푸시 알림 생성
@@ -63,38 +61,42 @@
 
       }
 
-      console.log(eventSource2)
+    })
 
-      console.log("===== =====")
+    const eventSource2 = new EventSource('/detailSeller/admin/notify/close/seller/' + productNo)
 
-      eventSource2.addEventListener("canceled", function(event) {
-        console.log(event.data)
+    console.log(eventSource2)
 
-        // 브라우저 푸시 알림 생성
-        if (Notification.permission === 'granted') {
-          new Notification('Bidssgket', {
-            body: event.data,
-          });
+    console.log("===== =====")
 
-          // 첫 번째 알림을 수신한 후, SSE 연결 종료 및 서버에 알림 중단 요청
-          $.ajax({
-            url: `/stop-notification`,
-            type: 'DELETE',
-            success: function(result) {
-              console.log(result);
-            },
-            error: function(xhr, status, error) {
-              console.error('Error:', error);
-            }
-          });
+    eventSource2.addEventListener("closed", function(event) {
+      console.log(event.data)
 
-          // 알림이 클릭되면 EventSource를 닫습니다.
-          eventSource2.close();
+      // 브라우저 푸시 알림 생성
+      if (Notification.permission === 'granted') {
+        new Notification('Bidssgket', {
+          body: event.data,
+        });
 
-        }
+        // 첫 번째 알림을 수신한 후, SSE 연결 종료 및 서버에 알림 중단 요청
+        $.ajax({
+          url: `/stop-notification`,
+          type: 'DELETE',
+          success: function (result) {
+            console.log(result);
+          },
+          error: function (xhr, status, error) {
+            console.error('Error:', error);
+          }
+        });
 
+        // 알림이 클릭되면 EventSource를 닫습니다.
+        eventSource2.close();
+
+      }
 
     })
+
     /*=========== 알람 기능 끝 =============*/
 
   </script>

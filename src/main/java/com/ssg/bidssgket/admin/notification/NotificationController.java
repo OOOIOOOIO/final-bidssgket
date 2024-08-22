@@ -71,7 +71,7 @@ public class NotificationController {
     /**
      * 경매 마감 알림(buyer)
      */
-    @GetMapping(value = "/detailSeller/admin/notify/close/buyer/{productNo}", produces = "text/event-stream")
+    @GetMapping(value = "/detailBuyer/admin/notify/close/buyer/{productNo}", produces = "text/event-stream")
     public String pushAuctionClosedBuyer(@RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId,
                                     @PathVariable(value = "productNo") Long productNo){
 

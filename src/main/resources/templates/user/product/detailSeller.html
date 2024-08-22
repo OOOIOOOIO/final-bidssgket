@@ -207,7 +207,7 @@
     /*=========== 알람 기능 시작 =============*/
     var productNo = [[${product.productNo}]];
 
-    const eventSource = new EventSource('admin/notify/close/seller/' + productNo)
+    const eventSource = new EventSource('/detailSeller/admin/notify/close/seller/' + productNo)
 
     console.log(eventSource)
 
@@ -242,6 +242,8 @@
 
     })
     /*=========== 알람 기능 끝 =============*/
+
+
   </script>
 </main>
 </body>
