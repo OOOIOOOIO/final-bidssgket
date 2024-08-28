@@ -72,27 +72,17 @@
 
 										productReportList.content.forEach(function(productReport){
 											productReportListSpace.append(
-<<<<<<< HEAD
-													`
-=======
+
 														`
->>>>>>> origin/main
 														<tr>
 															<th scope="col">${productReport.complainNo}</th>
 															<th scope="col">${productReport.productNo}</th>
 															<th scope="col">${productReport.memberNo}</th>
 															<th scope="col">${productReport.complainDate}</th>
 															<th scope="col" style="max-width: 800px">${productReport.complainContent}</th>
-															<th scope="col">
 																<button onclick="approve(${productReport.complainNo})">승인</button>
 															</th>
 															<th scope="col">
-<<<<<<< HEAD
-=======
-																<button onclick="approve(${productReport.complainNo})">승인</button>
-															</th>
-															<th scope="col">
->>>>>>> origin/main
 																<button onclick="reject(${productReport.complainNo})">반려</button>
 															</th>
 														</tr>
