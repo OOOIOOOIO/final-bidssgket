@@ -15,6 +15,7 @@ import java.util.List;
 
 
 @Entity
+@Table(name = "product")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product extends BaseTimeEntity {
@@ -54,12 +55,10 @@ public class Product extends BaseTimeEntity {
     @OneToOne(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private DeliveryAddress deliveryAddress; // 배송지 정보 [FK]
 
-    @OneToOne(cascade = {CascadeType.REMOVE},orphanRemoval = true)
-    @JoinColumn(name = "productNo", insertable = false, updatable = false)
+    @OneToOne(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private SaleOrder saleOrder;
 
-    @OneToOne(cascade = {CascadeType.REMOVE},orphanRemoval = true)
-    @JoinColumn(name = "productNo", insertable = false, updatable = false)
+    @OneToOne(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private PurchaseOrder purchaseOrder;
 
     @Builder
@@ -211,5 +210,7 @@ public class Product extends BaseTimeEntity {
         this.deliveryAddress = deliveryAddress;
     }
 
-
+    public String getSaleStatus(SalesStatus salesStatus) {
+        return salesStatus.name();
+    }
 }

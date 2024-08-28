@@ -19,10 +19,14 @@ import com.ssg.bidssgket.user.domain.productwish.domain.dto.MemberDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,8 +44,8 @@ public class ProductViewController {
     private final MemberRepository memberRepository;
     private final EventAuctionService eventAuctionService;
     private final AuctionService auctionService;
-    private final ProductWishService productWishService;
     private final NotificationService notificationService;
+    private final ProductWishService productWishService;
 
 
     @GetMapping(value = "/register", produces = "text/event-stream")
@@ -95,7 +99,7 @@ public class ProductViewController {
     public String updateProduct(@PathVariable("productNo") Long productNo,
                                 @ModelAttribute ProductReqDto productReqDto) {
         productService.updateProduct(productReqDto);
-        return "redirect:/detailBuyer/" + productNo;
+        return "redirect:/detailSeller/" + productNo;
     }
 
 
@@ -158,6 +162,7 @@ public class ProductViewController {
     public String categoryController(Model model, @PathVariable("category") Category category, HttpSession httpSession) {
         log.info("category: {}", category);
         List<Product> products = productService.getProductsByCategory(category);
+        model.addAttribute("category", category.name());
         model.addAttribute("products", products);
         SessionMember sessionMember = (SessionMember) httpSession.getAttribute("member");
         List<Long> wishedProductIds = new ArrayList<>();

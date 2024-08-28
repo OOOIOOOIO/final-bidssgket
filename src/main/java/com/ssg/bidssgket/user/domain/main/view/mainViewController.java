@@ -26,10 +26,8 @@ public class mainViewController {
 
     private final ProductService productService;
     private final EventAuctionService eventAuctionService;
-    @Autowired
-    private ProductWishService productWishService;
-    @Autowired
-    private AuctionService auctionService;
+    private final ProductWishService productWishService;
+    private final AuctionService auctionService;
 
 
     @GetMapping("/")
@@ -57,9 +55,18 @@ public class mainViewController {
     }
 
     @GetMapping("/auction/auctionMain")
-    public String auctionMain(Model model) {
+    public String auctionMain(Model model, HttpSession httpSession) {
         List<Product> products = productService.getAuctionProducts();
         model.addAttribute("products", products);
+        SessionMember sessionMember = (SessionMember) httpSession.getAttribute("member");
+        List<Long> wishedProductIds = new ArrayList<>();
+
+        if (sessionMember != null) {
+            MemberDTO member = auctionService.getMemberByEmail(sessionMember.getEmail());
+            wishedProductIds = productWishService.findProductNoByMemberNo(member.getMemberNo());
+            System.out.println("wishedProductIds = " + wishedProductIds);
+        }
+        model.addAttribute("wishedProductIds", wishedProductIds);
         return "user/auction/auctionMain";
     }
 
@@ -71,7 +78,6 @@ public class mainViewController {
         } else {
             products = productService.getAllProducts();
         }
-        System.out.println("products = " + products.toString());
         model.addAttribute("products", products);
         SessionMember sessionMember = (SessionMember) httpSession.getAttribute("member");
         List<Long> wishedProductIds = new ArrayList<>();
